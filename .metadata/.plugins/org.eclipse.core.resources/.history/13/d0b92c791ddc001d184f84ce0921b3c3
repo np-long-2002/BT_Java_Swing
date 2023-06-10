@@ -1,0 +1,79 @@
+package view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+public class MainFrame {
+
+	private JFrame frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainFrame window = new MainFrame();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public MainFrame() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("H\u1EC7 Th\u1ED1ng");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("\u0110\u0103ng Nh\u1EADp");
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("\u0110\u0103ng Xu\u1EA5t");
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Tho\u00E1t");
+		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JMenu mnNewMenu_1 = new JMenu("Qu\u1EA3n L\u00FD");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Lo\u1EA1i S\u00E1ch");
+		mnNewMenu_1.add(mntmNewMenuItem_3);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("S\u00E1ch");
+		mnNewMenu_1.add(mntmNewMenuItem_4);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("H\u00F3a \u0110\u01A1n");
+		mnNewMenu_1.add(mntmNewMenuItem_5);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Phi\u1EBFu Nh\u1EADp S\u00E1ch");
+		mnNewMenu_1.add(mntmNewMenuItem_6);
+		
+		JMenu mnNewMenu_2 = new JMenu("H\u01B0\u1EDBng D\u1EABn");
+		menuBar.add(mnNewMenu_2);
+	}
+
+}

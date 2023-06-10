@@ -1,0 +1,59 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import model.KhachHang;
+
+
+public class KhachHangDAO extends KetNoiDatabase{
+	public ArrayList<KhachHang> docKhachHang(){
+		ArrayList<KhachHang> arrayList = new ArrayList<KhachHang>();
+		try {
+			String sql = "select * from KhachHang";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				KhachHang KhachHang = new KhachHang();
+				KhachHang.setMaKH(set.getString(1));
+				KhachHang.setTenKH(set.getString(2));
+				KhachHang.setNamSinh(set.getInt(3));
+				KhachHang.setMaNhom(set.getString(4));
+				arrayList.add(KhachHang);
+			}
+			closeConnection(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return arrayList;
+	}
+	public int luuSP(KhachHang kh) {
+		try {
+			String sql = "insert into KhachHang values(?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, kh.getMaKH());
+			preparedStatement.setString(2,kh.getTenKH());
+			preparedStatement.setInt(3, kh.getNamSinh());
+			preparedStatement.setString(4, kh.getMaNhom());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaSP(String maKH) {
+		try {
+			String sql ="delete from KhachHang where MaKH =?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, maKH);
+			return preparedStatement.executeUpdate() >0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+}

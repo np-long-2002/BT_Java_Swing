@@ -1,0 +1,205 @@
+package view;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import dao.PhieuNhapSachDAO;
+import model.PhieuNhapSach;
+
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class frmPhieuNhapSach extends JInternalFrame {
+	private JTextField txtMa;
+	private JTextField txtGC;
+	private JTextField txtNgay;
+	private JTextField txtNV;
+	private static JTable tbPNS;
+	private static ArrayList<PhieuNhapSach> arrayList;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmPhieuNhapSach frame = new frmPhieuNhapSach();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmPhieuNhapSach() {
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("M\u00E3");
+		lblNewLabel.setBounds(10, 157, 46, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblGhiCh = new JLabel("Ghi Ch\u00FA");
+		lblGhiCh.setBounds(10, 193, 46, 14);
+		getContentPane().add(lblGhiCh);
+		
+		JLabel lblNgy = new JLabel("Ng\u00E0y");
+		lblNgy.setBounds(205, 157, 46, 14);
+		getContentPane().add(lblNgy);
+		
+		JLabel lblNhnVin = new JLabel("Nh\u00E2n Vi\u00EAn");
+		lblNhnVin.setBounds(205, 193, 46, 14);
+		getContentPane().add(lblNhnVin);
+		
+		txtMa = new JTextField();
+		txtMa.setBounds(80, 154, 115, 20);
+		getContentPane().add(txtMa);
+		txtMa.setColumns(10);
+		
+		txtGC = new JTextField();
+		txtGC.setColumns(10);
+		txtGC.setBounds(80, 190, 115, 20);
+		getContentPane().add(txtGC);
+		
+		txtNgay = new JTextField();
+		txtNgay.setColumns(10);
+		txtNgay.setBounds(271, 154, 115, 20);
+		getContentPane().add(txtNgay);
+		
+		txtNV = new JTextField();
+		txtNV.setColumns(10);
+		txtNV.setBounds(271, 190, 115, 20);
+		getContentPane().add(txtNV);
+		
+		JButton btnThem = new JButton("Th\u00EAm");
+		btnThem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				PhieuNhapSach don = new PhieuNhapSach();
+				don.setId(Integer.parseInt(txtMa.getText()));
+				don.setNgay(txtNgay.getText());
+				don.setNhanVien(txtNV.getText());
+				don.setGhiChu(txtGC.getText());
+				PhieuNhapSachDAO sachDAO = new PhieuNhapSachDAO();
+				if (sachDAO.luuSP(don)>0 )
+			     {    
+			      JOptionPane.showMessageDialog(null, "lưu thành công");
+			      hienthi();
+			      }
+			      else
+			           JOptionPane.showMessageDialog(null, "lưu that bại");
+			}
+		});
+		btnThem.setBounds(10, 236, 89, 23);
+		getContentPane().add(btnThem);
+		
+		JButton btnXa = new JButton("X\u00F3a");
+		btnXa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int index = tbPNS.getSelectedRow();
+				PhieuNhapSachDAO sachDAO = new PhieuNhapSachDAO();
+				sachDAO.xoaSP(tbPNS.getValueAt(index,0).toString());
+				hienthi();
+			}
+		});
+		btnXa.setBounds(162, 236, 89, 23);
+		getContentPane().add(btnXa);
+		
+		JButton btnSa = new JButton("S\u1EEDa");
+		btnSa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				PhieuNhapSach don = new PhieuNhapSach();
+				don.setId(Integer.parseInt(txtMa.getText()));
+				don.setNgay(txtNgay.getText());
+				don.setNhanVien(txtNV.getText());
+				don.setGhiChu(txtGC.getText());
+			}
+		});
+		btnSa.setBounds(297, 236, 89, 23);
+		getContentPane().add(btnSa);
+		
+		tbPNS = new JTable();
+		tbPNS.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int row = tbPNS.getSelectedRow();
+				txtMa.setText(String.valueOf(tbPNS.getValueAt(row, 0)));;
+				txtGC.setText(String.valueOf(tbPNS.getValueAt(row, 1)));
+				txtNgay.setText(String.valueOf(tbPNS.getValueAt(row, 2)));
+				txtNV.setText(String.valueOf(tbPNS.getValueAt(row, 3)));
+			}
+		});
+		tbPNS.setBounds(10, 11, 414, 138);
+		getContentPane().add(tbPNS);
+		hienthi();
+	}
+	public static void hienthi() {
+		PhieuNhapSachDAO dao = new PhieuNhapSachDAO();
+		arrayList=dao.docLS();
+		DefaultTableModel model = (DefaultTableModel) tbPNS.getModel();
+		model.setRowCount(0);
+		for(int i=0;i<arrayList.size();i++) {
+			Vector<Object> vec = new Vector<>();
+	        vec.add(arrayList.get(i).getId());
+	        vec.add(arrayList.get(i).getGhiChu());
+	        vec.add(arrayList.get(i).getNgay());
+	        vec.add(arrayList.get(i).getNhanVien());
+	        model.addRow(vec); 
+		}
+	}
+
+}

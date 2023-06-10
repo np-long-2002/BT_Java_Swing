@@ -1,0 +1,239 @@
+package view;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class frmPhieuNhapSach extends JInternalFrame {
+	private JTextField txtMa;
+	private JTextField txtGC;
+	private JTextField txtNgay;
+	private JTextField txtNV;
+	private static JTable tbPNS;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmPhieuNhapSach frame = new frmPhieuNhapSach();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmPhieuNhapSach() {
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("M\u00E3");
+		lblNewLabel.setBounds(10, 157, 46, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblGhiCh = new JLabel("Ghi Ch\u00FA");
+		lblGhiCh.setBounds(10, 193, 46, 14);
+		getContentPane().add(lblGhiCh);
+		
+		JLabel lblNgy = new JLabel("Ng\u00E0y");
+		lblNgy.setBounds(205, 157, 46, 14);
+		getContentPane().add(lblNgy);
+		
+		JLabel lblNhnVin = new JLabel("Nh\u00E2n Vi\u00EAn");
+		lblNhnVin.setBounds(205, 193, 46, 14);
+		getContentPane().add(lblNhnVin);
+		
+		txtMa = new JTextField();
+		txtMa.setBounds(80, 154, 115, 20);
+		getContentPane().add(txtMa);
+		txtMa.setColumns(10);
+		
+		txtGC = new JTextField();
+		txtGC.setColumns(10);
+		txtGC.setBounds(80, 190, 115, 20);
+		getContentPane().add(txtGC);
+		
+		txtNgay = new JTextField();
+		txtNgay.setColumns(10);
+		txtNgay.setBounds(271, 154, 115, 20);
+		getContentPane().add(txtNgay);
+		
+		txtNV = new JTextField();
+		txtNV.setColumns(10);
+		txtNV.setBounds(271, 190, 115, 20);
+		getContentPane().add(txtNV);
+		
+		JButton btnThem = new JButton("Th\u00EAm");
+		btnThem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Connection conn = null;
+				try {
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+					conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=quanlynhasach;integratedSecurity=true;trustServerCertificate=true;");
+					String sql = "insert into PhieuNhapSach values (?,?,?,?)";
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setInt(1, Integer.parseInt(txtMa.getText().toString().trim()));
+					statement.setString(2,txtGC.getText().toString().trim());
+					statement.setString(3, txtNgay.getText().toString().trim());
+					statement.setString(4,txtNV.getText().toString().trim());
+					statement.executeUpdate();
+					conn.close();
+					hienthi();
+				}catch (Exception e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnThem.setBounds(10, 236, 89, 23);
+		getContentPane().add(btnThem);
+		
+		JButton btnXa = new JButton("X\u00F3a");
+		btnXa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Connection conn = null;
+				try {
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+					conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=quanlynhasach;integratedSecurity=true;trustServerCertificate=true;");
+					String sql = "delete from PhieuNhapSach where PNS_ID = ? ";
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setString(1, txtMa.getText().toString().trim());
+					statement.executeUpdate();
+					conn.close();
+					hienthi();
+				}catch (Exception e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnXa.setBounds(162, 236, 89, 23);
+		getContentPane().add(btnXa);
+		
+		JButton btnSa = new JButton("S\u1EEDa");
+		btnSa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Connection conn = null;
+				try {
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+					conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=quanlynhasach;integratedSecurity=true;trustServerCertificate=true;");
+					String sql = "update PhieuNhapSach set GhiChu = ? , Ngay = ? , NhanVien = ?  where PNS_ID = ? ";
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setString(1,txtGC.getText().toString().trim());
+					statement.setString(2, txtNgay.getText().toString().trim());
+					statement.setString(3,txtNV.getText().toString().trim());
+					statement.setInt(4, Integer.parseInt(txtMa.getText().toString().trim()));
+					statement.executeUpdate();
+					conn.close();
+					hienthi();
+				}catch (Exception e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnSa.setBounds(297, 236, 89, 23);
+		getContentPane().add(btnSa);
+		
+		tbPNS = new JTable();
+		tbPNS.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int row = tbPNS.getSelectedRow();
+				txtMa.setText(String.valueOf(tbPNS.getValueAt(row, 0)));;
+				txtGC.setText(String.valueOf(tbPNS.getValueAt(row, 1)));
+				txtNgay.setText(String.valueOf(tbPNS.getValueAt(row, 2)));
+				txtNV.setText(String.valueOf(tbPNS.getValueAt(row, 3)));
+			}
+		});
+		tbPNS.setBounds(10, 11, 414, 138);
+		getContentPane().add(tbPNS);
+		hienthi();
+	}
+	public static void hienthi() {
+		Connection conn = null;
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=quanlynhasach;integratedSecurity=true;trustServerCertificate=true;");
+			Statement statement = conn.createStatement();
+			String sql = "select * from PhieuNhapSach";
+			ResultSet set = statement.executeQuery(sql);
+			DefaultTableModel model = new DefaultTableModel();
+			model.addColumn("Mã");
+			model.addColumn("Ghi Chú");
+			model.addColumn("Ngày");
+			model.addColumn("Nhân Viên");
+			while(set.next()) {
+				Vector vt = new Vector();
+				vt.add(set.getInt("PNS_ID"));
+				vt.add(set.getString("GhiChu"));
+				vt.add(set.getDate("Ngay"));
+				vt.add(set.getString("NhanVien"));
+				model.addRow(vt);
+			}
+			tbPNS.setModel(model);
+			conn.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+}

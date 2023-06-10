@@ -1,0 +1,73 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import model.DanhMuc;
+import model.SanPham;
+
+@SuppressWarnings("unused")
+public class DanhMucDAO extends KetNoiDatabase{
+	public Vector<DanhMuc> docdanhmuc()
+	{
+		Vector<DanhMuc> vector = new Vector<DanhMuc>();
+		try {
+			String sql = "select * from DanhMuc where isDelete = 0";
+			Statement statement =  conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				DanhMuc danhMuc= new DanhMuc();
+				danhMuc.setMaDM(set.getString(1));
+				danhMuc.setTenDM(set.getString(2));
+				danhMuc.setIsDelete(0);
+				vector.add(danhMuc);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return vector;
+	}
+	public int luuDM(DanhMuc dm) {
+		try {
+			String sql = "insert into danhmuc values(?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, dm.getMaDM());
+			preparedStatement.setString(2,dm.getTenDM());
+			preparedStatement.setInt(3, 0);
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int capnhapDM(DanhMuc dm) {
+		try {
+			String sql = "update DanhMuc set TenDM=?,isDelete=? where MaDM=?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, dm.getTenDM());
+			preparedStatement.setInt(2, 0);
+			preparedStatement.setString(3,dm.getMaDM());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaDM(String maDM) {
+		try {
+			String sql ="delete from DanhMuc where MaDM =?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, maDM);
+			return preparedStatement.executeUpdate()>0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+}

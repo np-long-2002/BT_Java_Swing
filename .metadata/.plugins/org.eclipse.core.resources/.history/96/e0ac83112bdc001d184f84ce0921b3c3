@@ -1,0 +1,59 @@
+package view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Main extends JInternalFrame {
+	static Main frame;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frame= new Main();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Main() {
+		setBounds(100, 100, 450, 300);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("H\u1EC7 Th\u1ED1ng");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem btnDangNhap = new JMenuItem("\u0110\u0103ng Nh\u1EADp");
+		btnDangNhap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				frmDangNhap frmDangNhap = new frmDangNhap(frame, true);
+			}
+		});
+		mnNewMenu.add(btnDangNhap);
+		
+		JMenuItem btnDangXuat = new JMenuItem("\u0110\u0103ng Xu\u1EA5t");
+		mnNewMenu.add(btnDangXuat);
+		
+		JMenuItem btnThoat = new JMenuItem("Tho\u00E1t");
+		mnNewMenu.add(btnThoat);
+
+	}
+
+}

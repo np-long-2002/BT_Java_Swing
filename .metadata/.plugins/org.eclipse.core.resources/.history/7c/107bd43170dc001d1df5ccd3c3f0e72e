@@ -1,0 +1,79 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.HoaDon;
+import model.Sach;
+
+public class HoaDonDAO extends KetNoiDatabase{
+	public ArrayList<HoaDon> docLS(){
+		ArrayList<HoaDon> arrayList = new ArrayList<HoaDon>();
+		try {
+			String sql = "select * from HoaDon";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				HoaDon don = new  HoaDon();
+				don.setId(set.getInt(1));
+				don.setNgay(set.getString(2));
+				don.setNhanVien(set.getString(3));
+				don.setTenKH(set.getString(4));
+				don.setGhiChu(set.getString(5));
+				arrayList.add(don);
+			}
+			conn.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+	public int luuSP(Sach sach) {
+		try {
+			String sql = "insert into Sach values(?,?,?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(1, sach.getId());
+			preparedStatement.setString(2,sach.getTieuDe());
+			preparedStatement.setString(3, sach.getTacGia());
+			preparedStatement.setInt(4, sach.getNamSX());
+			preparedStatement.setInt(5, sach.getTheLoai());
+			preparedStatement.setString(6, sach.getMoTa());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaSP(String ma) {
+		try {
+			String sql ="delete from Sach where S_ID =?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, ma);
+			return preparedStatement.executeUpdate() >0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public int capnhapSP(Sach sach) {
+		try {
+			String sql = "update Sach set TieuDe = ? , TacGia = ? , NamSX = ? ,MoTa = ? where S_ID = ? ";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, sach.getTieuDe());
+			preparedStatement.setString(2, sach.getTacGia());
+			preparedStatement.setInt(3,sach.getNamSX());
+			preparedStatement.setString(4, sach.getMoTa());
+			preparedStatement.setInt(5,sach.getId());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+}

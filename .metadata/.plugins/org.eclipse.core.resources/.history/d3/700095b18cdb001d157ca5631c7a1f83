@@ -1,0 +1,12 @@
+package model;
+
+public class KhachHang {
+	private String maKH;
+	private String tenKH;
+	private int namSinh;
+	private String maNhom;
+	public KhachHang() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+}

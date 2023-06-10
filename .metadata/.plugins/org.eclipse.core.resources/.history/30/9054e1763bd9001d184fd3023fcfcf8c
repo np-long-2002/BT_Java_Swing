@@ -1,0 +1,18 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class KetNoiDatabase {
+	protected Connection conn =null;
+	public KetNoiDatabase() {
+		try {
+			
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=QL_KhachHang;integratedSecurity=true;trustServerCertificate=true;");
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+}

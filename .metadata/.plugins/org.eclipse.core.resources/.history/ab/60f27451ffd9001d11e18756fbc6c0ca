@@ -1,0 +1,30 @@
+package dao;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import model.DanhMuc;
+
+public class DanhMucDAO extends KetNoiDatabase{
+	public Vector<DanhMuc> docdanhmuc()
+	{
+		Vector<DanhMuc> vector = new Vector<DanhMuc>();
+		try {
+			String sql = "select * from DanhMuc where isDelete = 0";
+			Statement statement =  conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				DanhMuc danhMuc= new DanhMuc();
+				danhMuc.setMaDM(set.getInt(1));
+				danhMuc.setTenDM(set.getString(2));
+				danhMuc.setIsDelete(0);
+				vector.add(danhMuc);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return vector;
+	}
+}

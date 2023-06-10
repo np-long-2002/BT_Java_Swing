@@ -1,0 +1,8 @@
+package model;
+
+public class PhieuNhapSach {
+	private int id;
+	private String ghiChu;
+	private String ngay;
+	private String nhanVien;
+}

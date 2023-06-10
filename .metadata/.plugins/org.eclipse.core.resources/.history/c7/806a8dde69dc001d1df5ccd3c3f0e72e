@@ -1,0 +1,31 @@
+package dao;
+
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.LoaiSach;
+
+public class LoaiSachDAO extends KetNoiDatabase{
+	public ArrayList<LoaiSach> docLS(){
+		ArrayList<LoaiSach> arrayList = new ArrayList<LoaiSach>();
+		try {
+			String sql = "select * from LoaiSach";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				LoaiSach sach = new LoaiSach();
+				sach.setId(set.getInt(1));
+				sach.setTen(set.getString(2));
+				sach.setMoTa(set.getString(3));
+				arrayList.add(sach);
+			}
+			conn.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+}

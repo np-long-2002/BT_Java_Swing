@@ -1,0 +1,129 @@
+package view;
+
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class frmPhieuNhapSach extends JInternalFrame {
+	private JTextField txtMa;
+	private JTextField txtGC;
+	private JTextField txtNgay;
+	private JTextField txtNV;
+	private JTable tbPNS;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmPhieuNhapSach frame = new frmPhieuNhapSach();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmPhieuNhapSach() {
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("M\u00E3");
+		lblNewLabel.setBounds(10, 157, 46, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblGhiCh = new JLabel("Ghi Ch\u00FA");
+		lblGhiCh.setBounds(10, 193, 46, 14);
+		getContentPane().add(lblGhiCh);
+		
+		JLabel lblNgy = new JLabel("Ng\u00E0y");
+		lblNgy.setBounds(205, 157, 46, 14);
+		getContentPane().add(lblNgy);
+		
+		JLabel lblNhnVin = new JLabel("Nh\u00E2n Vi\u00EAn");
+		lblNhnVin.setBounds(205, 193, 46, 14);
+		getContentPane().add(lblNhnVin);
+		
+		txtMa = new JTextField();
+		txtMa.setBounds(80, 154, 115, 20);
+		getContentPane().add(txtMa);
+		txtMa.setColumns(10);
+		
+		txtGC = new JTextField();
+		txtGC.setColumns(10);
+		txtGC.setBounds(80, 190, 115, 20);
+		getContentPane().add(txtGC);
+		
+		txtNgay = new JTextField();
+		txtNgay.setColumns(10);
+		txtNgay.setBounds(271, 154, 115, 20);
+		getContentPane().add(txtNgay);
+		
+		txtNV = new JTextField();
+		txtNV.setColumns(10);
+		txtNV.setBounds(271, 190, 115, 20);
+		getContentPane().add(txtNV);
+		
+		JButton btnThem = new JButton("Th\u00EAm");
+		btnThem.setBounds(10, 236, 89, 23);
+		getContentPane().add(btnThem);
+		
+		JButton btnXa = new JButton("X\u00F3a");
+		btnXa.setBounds(162, 236, 89, 23);
+		getContentPane().add(btnXa);
+		
+		JButton btnSa = new JButton("S\u1EEDa");
+		btnSa.setBounds(297, 236, 89, 23);
+		getContentPane().add(btnSa);
+		
+		tbPNS = new JTable();
+		tbPNS.setBounds(10, 11, 414, 138);
+		getContentPane().add(tbPNS);
+
+	}
+	public static void hienthi() {
+		Connection conn = null;
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;encrypt=true;databaseName=quanlynhasach;integratedSecurity=true;trustServerCertificate=true;");
+			Statement statement = conn.createStatement();
+			String sql = "select * from PhieuNhapSach";
+			ResultSet set = statement.executeQuery(sql);
+			DefaultTableModel model = new DefaultTableModel();
+			model.addColumn("Mã");
+			model.addColumn("Ghi Chú");
+			model.addColumn("Ngày");
+			model.addColumn("Nhân Viên");
+			while(set.next()) {
+				Vector vt = new Vector();
+				vt.add(set.getInt("PNS_ID"));
+				vt.add(set.getString("GhiChu"));
+				vt.add(set.getDate("Ngay"));
+				vt.add(set.getString("NhanVien"));
+				model.addRow(vt);
+			}
+			tbPNS.setModel(model);
+			conn.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+}

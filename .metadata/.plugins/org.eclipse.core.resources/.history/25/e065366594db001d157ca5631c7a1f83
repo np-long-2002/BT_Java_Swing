@@ -1,0 +1,135 @@
+package view;
+
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import dao.KhachHangDAO;
+import model.KhachHang;
+
+public class GUI extends JFrame {
+
+	private static JPanel contentPane;
+	private static JTextField txtMaKH;
+	private static JTextField txtTenKH;
+	private static JTextField txtnamSinh;
+	private static JTable table;
+	static ArrayList<KhachHang> dskh;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					hienthi();
+					GUI frame = new GUI();
+					
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 473, 441);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Mã Khách Hàng");
+		lblNewLabel.setBounds(10, 273, 94, 14);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblTnKhchHng = new JLabel("Tên Khách Hàng");
+		lblTnKhchHng.setBounds(10, 306, 94, 14);
+		contentPane.add(lblTnKhchHng);
+		
+		JLabel lblNmSinh = new JLabel("Năm Sinh");
+		lblNmSinh.setBounds(10, 337, 94, 14);
+		contentPane.add(lblNmSinh);
+		
+		txtMaKH = new JTextField();
+		txtMaKH.setBounds(114, 270, 140, 20);
+		contentPane.add(txtMaKH);
+		txtMaKH.setColumns(10);
+		
+		txtTenKH = new JTextField();
+		txtTenKH.setColumns(10);
+		txtTenKH.setBounds(114, 303, 140, 20);
+		contentPane.add(txtTenKH);
+		
+		txtnamSinh = new JTextField();
+		txtnamSinh.setColumns(10);
+		txtnamSinh.setBounds(114, 334, 140, 20);
+		contentPane.add(txtnamSinh);
+		
+		JButton btnXoa = new JButton("Xóa");
+		btnXoa.setBounds(10, 373, 89, 23);
+		contentPane.add(btnXoa);
+		
+		JButton btnLuu = new JButton("Lưu");
+		btnLuu.setBounds(114, 373, 89, 23);
+		contentPane.add(btnLuu);
+		
+		JButton btnThem = new JButton("Thêm");
+		btnThem.setBounds(213, 373, 89, 23);
+		contentPane.add(btnThem);
+		
+		JButton btnLui = new JButton("<");
+		btnLui.setBounds(44, 11, 60, 44);
+		contentPane.add(btnLui);
+		
+		JButton btnTien = new JButton(">");
+		btnTien.setBounds(340, 11, 60, 44);
+		contentPane.add(btnTien);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null},
+				{null, null, null},
+			},
+			new String[] {
+				"M\u00E3 Kh\u00E1ch H\u00E0ng", "T\u00EAn Kh\u00E1ch H\u00E0ng", "N\u0103m Sinh"
+			}
+		));
+		table.getColumnModel().getColumn(0).setPreferredWidth(84);
+		table.getColumnModel().getColumn(1).setPreferredWidth(88);
+		table.getColumnModel().getColumn(2).setPreferredWidth(62);
+		table.setBounds(10, 59, 441, 203);
+		contentPane.add(table);
+	}
+	public static void hienthi() {
+		KhachHangDAO khDAO  = new KhachHangDAO();
+		dskh = khDAO.docKhachHang();
+		DefaultTableModel dftbl = (DefaultTableModel)table.getModel();
+	    dftbl.setRowCount(0);
+	    for(int i=0;i<dskh.size(); i++)
+	    {
+	    	Vector<Object> vec = new Vector<>();
+	        vec.add(dskh.get(i).getMaKH());
+	        vec.add(dskh.get(i).getTenKH());
+	        vec.add(dskh.get(i).getNamSinh());
+	        dftbl.addRow(vec);   
+	    }
+	}
+}

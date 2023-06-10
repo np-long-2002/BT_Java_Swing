@@ -1,0 +1,31 @@
+package dao;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.CDDVD;
+
+public class CDDVDdao extends KetNoiDatabase{
+	public ArrayList<CDDVD> docCD(){
+		ArrayList<CDDVD> arrayList = new ArrayList<CDDVD>();
+		try {
+			String sql = "select * from CDDVD";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				CDDVD cddvd = new CDDVD();
+				cddvd.setMa(set.getString(1));
+				cddvd.setTieude(set.getString(2));
+				cddvd.setLoaidia(set.getString(3));
+				cddvd.setNam(set.getInt(4));
+				arrayList.add(cddvd);
+			}
+			closeConnection(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return arrayList;
+	}
+}

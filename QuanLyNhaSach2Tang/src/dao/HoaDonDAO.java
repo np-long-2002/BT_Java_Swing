@@ -1,0 +1,78 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.HoaDon;
+
+
+public class HoaDonDAO extends KetNoiDatabase{
+	public ArrayList<HoaDon> docLS(){
+		ArrayList<HoaDon> arrayList = new ArrayList<HoaDon>();
+		try {
+			String sql = "select * from HoaDon";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				HoaDon don = new  HoaDon();
+				don.setId(set.getInt(1));
+				don.setNgay(set.getString(2));
+				don.setNhanVien(set.getString(3));
+				don.setTenKH(set.getString(4));
+				don.setGhiChu(set.getString(5));
+				arrayList.add(don);
+			}
+			conn.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+	public int luuSP(HoaDon don) {
+		try {
+			String sql = "insert into HoaDon values (?,?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(1, don.getId());
+			preparedStatement.setString(2,don.getNgay());
+			preparedStatement.setString(3, don.getNhanVien());
+			preparedStatement.setString(4, don.getTenKH());
+			preparedStatement.setString(5, don.getGhiChu());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaSP(String ma) {
+		try {
+			String sql = "delete from HoaDon where HD_ID = ? ";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, ma);
+			return preparedStatement.executeUpdate() >0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public int capnhapSP(HoaDon don) {
+		try {
+			String sql = "update HoaDon set Ngay = ? , NhanVien = ? , TenKH = ? ,GhiChu = ? where HD_ID = ? ";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(5, don.getId());
+			preparedStatement.setString(1,don.getNgay());
+			preparedStatement.setString(2, don.getNhanVien());
+			preparedStatement.setString(3, don.getTenKH());
+			preparedStatement.setString(4, don.getGhiChu());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+}

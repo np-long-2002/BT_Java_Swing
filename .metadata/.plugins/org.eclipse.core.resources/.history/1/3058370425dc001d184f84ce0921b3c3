@@ -1,0 +1,107 @@
+package view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class MainFrame {
+
+	private JFrame frame;
+	private static JMenuItem mniDN;
+	private static JMenuItem mniDX;
+	private static JMenuItem mniThoat;
+	private static JMenuItem mniLoaiSach;
+	private static JMenuItem mniSach;
+	private static JMenuItem mniHoaDon;
+	private static JMenuItem mniPhieuNhap;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainFrame window = new MainFrame();
+					mniDX.setEnabled(false);
+					mniHoaDon.setEnabled(false);
+					mniLoaiSach.setEnabled(false);
+					mniPhieuNhap.setEnabled(false);
+					mniSach.setEnabled(false);
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public MainFrame() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
+		JMenu mnHeThong = new JMenu("H\u1EC7 Th\u1ED1ng");
+		menuBar.add(mnHeThong);
+		
+		mniDN = new JMenuItem("\u0110\u0103ng Nh\u1EADp");
+		mniDN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmDangNhap frm = new frmDangNhap(frame,false);
+				frm.setVisible(true);
+				if(frm.isCheck()) {
+					mniDX.setEnabled(true);
+					mniDN.setEnabled(true);
+					mniHoaDon.setEnabled(true);
+					mniLoaiSach.setEnabled(true);
+					mniPhieuNhap.setEnabled(true);
+					mniSach.setEnabled(true);
+					mniThoat.setEnabled(true);
+				}
+			}
+		});
+		mnHeThong.add(mniDN);
+		
+		mniDX = new JMenuItem("\u0110\u0103ng Xu\u1EA5t");
+		mnHeThong.add(mniDX);
+		
+		mniThoat = new JMenuItem("Tho\u00E1t");
+		mnHeThong.add(mniThoat);
+		
+		JMenu mnQuanLy = new JMenu("Qu\u1EA3n L\u00FD");
+		menuBar.add(mnQuanLy);
+		
+		mniLoaiSach = new JMenuItem("Lo\u1EA1i S\u00E1ch");
+		mnQuanLy.add(mniLoaiSach);
+		
+		mniSach = new JMenuItem("S\u00E1ch");
+		mnQuanLy.add(mniSach);
+		
+		mniHoaDon = new JMenuItem("H\u00F3a \u0110\u01A1n");
+		mnQuanLy.add(mniHoaDon);
+		
+		mniPhieuNhap = new JMenuItem("Phi\u1EBFu Nh\u1EADp S\u00E1ch");
+		mnQuanLy.add(mniPhieuNhap);
+		
+		JMenu mnNewMenu_2 = new JMenu("H\u01B0\u1EDBng D\u1EABn");
+		menuBar.add(mnNewMenu_2);
+	}
+
+}

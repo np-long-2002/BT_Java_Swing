@@ -1,0 +1,8 @@
+package model;
+
+public class MaNhomKhachHang {
+	private String maNhom;
+	
+	private String tenNhom;
+}
+

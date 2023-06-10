@@ -1,0 +1,383 @@
+package view;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import dao.DanhMucDAO;
+import dao.SanPhamDAO;
+import model.DanhMuc;
+import model.SanPham;
+
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class GUI extends JFrame {
+
+	private JPanel contentPane;
+	private static JTextField txtmaSP;
+	private static JTextField txttenSP;
+	private static JTextField txtsoLuong;
+	private static JTextField txtdonGia;
+	private static JTable tbSP;
+	private static JList lsDM;
+	private static JComboBox cbDanhMuc;
+	static ArrayList<SanPham> dssp;
+	static Vector<DanhMuc> vec;
+	static int row;
+	private static JTextField txtNewDM;
+	private static JTextField txtNewMaDM;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI frame = new GUI();
+					hienthilenlist();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 792, 418);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		contentPane.setLayout(null);
+		lsDM = new JList();
+		lsDM.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				hienthi();
+				hienthiList();
+			}
+		});
+		lsDM.setBounds(10, 11, 324, 259);
+		contentPane.add(lsDM);
+		
+		JLabel lblNewLabel = new JLabel("Danh Mục");
+		lblNewLabel.setBounds(344, 196, 63, 14);
+		contentPane.add(lblNewLabel);
+		
+		cbDanhMuc = new JComboBox();
+		cbDanhMuc.setBounds(430, 192, 184, 22);
+		contentPane.add(cbDanhMuc);
+		
+		JLabel lblNewLabel_1 = new JLabel("Mã Sản Phẩm");
+		lblNewLabel_1.setBounds(344, 225, 85, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		txtmaSP = new JTextField();
+		txtmaSP.setBounds(430, 222, 184, 20);
+		contentPane.add(txtmaSP);
+		txtmaSP.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Tên Sản Phẩm");
+		lblNewLabel_2.setBounds(344, 256, 85, 14);
+		contentPane.add(lblNewLabel_2);
+		
+		txttenSP = new JTextField();
+		txttenSP.setBounds(430, 250, 184, 20);
+		contentPane.add(txttenSP);
+		txttenSP.setColumns(10);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Số Lượng");
+		lblNewLabel_1_1.setBounds(344, 284, 85, 14);
+		contentPane.add(lblNewLabel_1_1);
+		
+		txtsoLuong = new JTextField();
+		txtsoLuong.setColumns(10);
+		txtsoLuong.setBounds(430, 281, 184, 20);
+		contentPane.add(txtsoLuong);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Đơn Giá");
+		lblNewLabel_1_2.setBounds(344, 312, 85, 14);
+		contentPane.add(lblNewLabel_1_2);
+		
+		txtdonGia = new JTextField();
+		txtdonGia.setColumns(10);
+		txtdonGia.setBounds(430, 309, 184, 20);
+		contentPane.add(txtdonGia);
+		
+		JButton btnThemSP = new JButton("Thêm SP");
+		btnThemSP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SanPham sp = new SanPham();
+				 sp.setMaDM(((DanhMuc) lsDM.getSelectedValue()).getMaDM());
+			     sp.setMaSP(txtmaSP.getText());
+			     sp.setTenSP(txttenSP.getText());
+			     sp.setSoLuong(Integer.parseInt(txtsoLuong.getText()));
+			     sp.setDonGia(Integer.parseInt(txtdonGia.getText()));
+			     SanPhamDAO spdao =new SanPhamDAO() ;
+			     if (spdao.luuSP(sp)>0 )
+			     {    
+			      JOptionPane.showMessageDialog(null, "lưu thành công");
+			      hienthi();
+			      }
+			      else
+			           JOptionPane.showMessageDialog(null, "lưu that bại");
+			}
+		});
+		btnThemSP.setBounds(340, 349, 89, 23);
+		contentPane.add(btnThemSP);
+		
+		JButton btncapnhatSP = new JButton("Cập Nhật");
+		btncapnhatSP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SanPham sp = new SanPham();
+			        sp.setMaDM(((DanhMuc) (cbDanhMuc.getItemAt(cbDanhMuc.getSelectedIndex()))).getMaDM());
+			        sp.setMaSP(txtmaSP.getText());
+			        sp.setTenSP(txttenSP.getText());
+			        sp.setSoLuong(Integer.parseInt(txtsoLuong.getText()));
+			        sp.setDonGia(Integer.parseInt(txtdonGia.getText()));
+			       SanPhamDAO spdao =new SanPhamDAO() ;
+			       if (spdao.capnhapSP(sp)>0 )
+			       {    
+			    	   JOptionPane.showMessageDialog(null, "câp nhật thành công");
+			    	   hienthi();
+			       }
+			       else
+			           JOptionPane.showMessageDialog(null, "cập nhật that bại,khong duoc sua ma");
+			}
+		});
+		btncapnhatSP.setBounds(430, 349, 89, 23);
+		contentPane.add(btncapnhatSP);
+		
+		JButton btnxoaSP = new JButton("Xóa SP");
+		btnxoaSP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				 int index = tbSP.getSelectedRow();     
+			     SanPhamDAO spdao = new SanPhamDAO();
+			     spdao.xoaSP(tbSP.getValueAt(index,0).toString());
+			     hienthi();
+			}
+		});
+		btnxoaSP.setBounds(525, 349, 89, 23);
+		contentPane.add(btnxoaSP);
+		
+		JButton btnThemDM = new JButton("Thêm DM");
+		btnThemDM.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DanhMuc danhMuc = new DanhMuc();
+			     danhMuc.setMaDM(txtNewMaDM.getText());
+			     danhMuc.setTenDM(txtNewDM.getText());
+			     DanhMucDAO dmdao =new DanhMucDAO() ;
+			     if (dmdao.luuDM(danhMuc)>0 )
+			     {    
+			      JOptionPane.showMessageDialog(null, "lưu thành công");
+			      hienthilenlist();
+			      }
+			      else
+			           JOptionPane.showMessageDialog(null, "lưu that bại");
+			}
+		});
+		btnThemDM.setBounds(34, 349, 89, 23);
+		contentPane.add(btnThemDM);
+		
+		JButton btncapnhatDM = new JButton("Cập Nhật");
+		btncapnhatDM.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				DanhMuc danhMuc = new DanhMuc();
+		        danhMuc.setMaDM(txtNewMaDM.getText());
+		        danhMuc.setTenDM(txtNewDM.getText());
+		       DanhMucDAO dmdao =new DanhMucDAO() ;
+		       if (dmdao.capnhapDM(danhMuc)>0 )
+		       {    
+		    	   JOptionPane.showMessageDialog(null, "câp nhật thành công");
+		    	   hienthilenlist();
+		       }
+		       else
+		           JOptionPane.showMessageDialog(null, "cập nhật that bại,khong duoc sua ma");
+		}
+		});
+		btncapnhatDM.setBounds(124, 349, 89, 23);
+		contentPane.add(btncapnhatDM);
+		
+		JButton btnxoaDM = new JButton("Xóa DM");
+		btnxoaSP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+//				 int index = lsDM.getSelectedIndex();     
+			     DanhMucDAO dmdao = new DanhMucDAO();
+			     dmdao.xoaDM(lsDM.getSelectedValue().toString());
+			     hienthilenlist();
+			}
+		});
+		btnxoaDM.setBounds(219, 349, 89, 23);
+		contentPane.add(btnxoaDM);
+		tbSP = new JTable();
+		tbSP.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"M\u00E3 SP", "T\u00EAn SP", "S\u1ED1 L\u01B0\u1EE3ng", "\u0110\u01A1n Gi\u00E1"
+			}
+		));
+		tbSP.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				hienthiTable();
+			}
+		});
+		tbSP.setBounds(344, 12, 426, 170);
+		contentPane.add(tbSP);
+		
+		txtNewDM = new JTextField();
+		txtNewDM.setColumns(10);
+		txtNewDM.setBounds(150, 309, 184, 20);
+		contentPane.add(txtNewDM);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("Tên Danh Mục Mới");
+		lblNewLabel_1_2_1.setBounds(10, 312, 113, 14);
+		contentPane.add(lblNewLabel_1_2_1);
+		
+		txtNewMaDM = new JTextField();
+		txtNewMaDM.setColumns(10);
+		txtNewMaDM.setBounds(150, 281, 184, 20);
+		contentPane.add(txtNewMaDM);
+		
+		JLabel lblNewLabel_1_2_1_1 = new JLabel("Mã Danh Mục Mới");
+		lblNewLabel_1_2_1_1.setBounds(10, 284, 113, 14);
+		contentPane.add(lblNewLabel_1_2_1_1);
+	}
+public static void hienthi() {
+	SanPhamDAO sanPhamDAO  = new SanPhamDAO();
+	dssp = sanPhamDAO.doctheodanhmuc(  ((DanhMuc) lsDM.getSelectedValue()).getMaDM());
+	DefaultTableModel dftbl = (DefaultTableModel)tbSP.getModel();
+    dftbl.setRowCount(0);
+    for(int i=0;i<dssp.size(); i++)
+    {
+    	Vector<Object> vec = new Vector<>();
+        vec.add(dssp.get(i).getMaSP());
+        vec.add(dssp.get(i).getTenSP());
+        vec.add(dssp.get(i).getSoLuong());
+        vec.add(dssp.get(i).getDonGia());
+        dftbl.addRow(vec);   
+    }
+	cbDanhMuc.setSelectedItem(lsDM.getSelectedValue());
+}
+public static void hienthiList() {
+	row = lsDM.getSelectedIndex();
+	DanhMuc danhMuc = vec.get(row);
+	txtNewDM.setText(danhMuc.getTenDM());
+	txtNewMaDM.setText(danhMuc.getMaDM());
+}
+public static void hienthiTable() {
+	row = tbSP.getSelectedRow();
+	if(row == -1) {
+		return;
+	}
+     SanPham sp = dssp.get(row);
+     txttenSP.setText(sp.getTenSP()); 
+     txtmaSP.setText(dssp.get(row).getMaSP());
+     txtsoLuong.setText(String.valueOf(sp.getSoLuong()));
+     txtdonGia.setText(String.valueOf(sp.getDonGia()));
+}
+ public static void hienthilenlist()
+    { 
+      DanhMucDAO dmDao = new DanhMucDAO();
+      vec = dmDao.docdanhmuc();
+      lsDM.setListData(vec);
+      DefaultComboBoxModel cbo = new DefaultComboBoxModel();
+      for (DanhMuc dm : vec)
+      { 
+         cbo.addElement(dm);
+      }
+      cbDanhMuc.setModel(cbo);
+    }
+ }

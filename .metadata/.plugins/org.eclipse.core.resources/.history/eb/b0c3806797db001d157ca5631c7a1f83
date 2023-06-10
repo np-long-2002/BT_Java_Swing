@@ -1,0 +1,32 @@
+package dao;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.KhachHang;
+
+
+public class KhachHangDAO extends KetNoiDatabase{
+	public ArrayList<KhachHang> docKhachHang(){
+		ArrayList<KhachHang> arrayList = new ArrayList<KhachHang>();
+		try {
+			String sql = "select * from KhachHang";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				KhachHang KhachHang = new KhachHang();
+				KhachHang.setMaKH(set.getString(1));
+				KhachHang.setTenKH(set.getString(2));
+				KhachHang.setNamSinh(set.getInt(3));
+				KhachHang.setMaNhom(set.getString(4));
+				arrayList.add(KhachHang);
+			}
+			closeConnection(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return arrayList;
+	}
+}

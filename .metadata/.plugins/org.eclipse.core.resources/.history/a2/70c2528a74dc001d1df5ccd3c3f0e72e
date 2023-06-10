@@ -1,0 +1,82 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.CDDVD;
+
+public class CDDVDdao extends KetNoiDatabase{
+	public ArrayList<CDDVD> docCD(){
+		ArrayList<CDDVD> arrayList = new ArrayList<CDDVD>();
+		try {
+			String sql = "select * from CDDVD";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				CDDVD cddvd = new CDDVD();
+				cddvd.setMa(set.getString(1));
+				cddvd.setTieude(set.getString(2));
+				cddvd.setLoaidia(set.getString(3));
+				cddvd.setNam(set.getInt(4));
+				arrayList.add(cddvd);
+			}
+			closeConnection(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return arrayList;
+	}
+	public int luuDia(CDDVD cd) {
+		try {
+			String sql = "insert into CDDVD values(?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, cd.getMa());
+			preparedStatement.setString(2,cd.getTieude());
+			preparedStatement.setString(3, cd.getLoaidia());
+			preparedStatement.setInt(4, cd.getNam());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaDia(String ma) {
+		try {
+			String sql ="delete from CDDVD where Ma =?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, ma);
+			return preparedStatement.executeUpdate() >0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public ArrayList<CDDVD> timKiemDia(String tu){
+	    ArrayList<CDDVD> arrayList =new ArrayList<CDDVD>();
+	        try {
+	            String sql="select *from CDDVD where Ma like ? OR TieuDe like ? OR Loai like ? OR NamXuatBan like ?";
+	        PreparedStatement pst=conn.prepareStatement(sql);
+	        pst.setString(1, "%" + tu + "%");
+	        pst.setString(2, "%" + tu + "%");
+	        pst.setString(3, "%" + tu + "%");
+	        pst.setString(4, "%" + tu + "%");
+	        ResultSet rs = pst.executeQuery();
+	        while (rs.next()) {
+	             CDDVD cddvd = new CDDVD();
+	             cddvd.setMa(rs.getString(1));
+	             cddvd.setTieude(rs.getString(2));
+	             cddvd.setLoaidia(rs.getString(3));
+	             cddvd.setNam(rs.getInt(4));
+	        }
+	        conn.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return arrayList;
+	    }
+}

@@ -1,0 +1,103 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.SanPham;
+
+public class SanPhamDAO extends KetNoiDatabase{
+	public ArrayList<SanPham> docsanpham(){
+		ArrayList<SanPham> arrayList = new ArrayList<SanPham>();
+		try {
+			String sql = "select * from SanPham where isDelete =0";
+			Statement statement = conn.createStatement();
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				SanPham sanPham = new SanPham();
+				sanPham.setMaSP(set.getString(1));
+				sanPham.setTenSP(set.getString(2));
+				sanPham.setSoLuong(set.getInt(3));
+				sanPham.setDonGia(set.getInt(4));
+				sanPham.setMaDM(set.getString(5));
+				sanPham.setIsDelete(0);
+				arrayList.add(sanPham);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return arrayList;
+	}
+	public ArrayList<SanPham> doctheodanhmuc (String madm){
+		ArrayList<SanPham> dssp = new ArrayList<SanPham>();
+		try {
+			String sql = "select * from SanPham where MaDM = ? and isDelete =0";
+			PreparedStatement statement =conn.prepareStatement(sql);
+			statement.setString(1, madm);
+			ResultSet set = statement.executeQuery();
+			while(set.next()) {
+				SanPham sanPham = new SanPham();
+				sanPham.setMaSP(set.getString(1));
+				sanPham.setTenSP(set.getString(2));
+				sanPham.setSoLuong(set.getInt(3));
+				sanPham.setDonGia(set.getInt(4));
+				sanPham.setMaDM(set.getString(5));
+				sanPham.setIsDelete(0);
+				dssp.add(sanPham);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dssp;
+	}
+	public int luuSP(SanPham sp) {
+		try {
+			String sql = "insert into SanPham values(?,?,?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, sp.getMaSP());
+			preparedStatement.setString(2,sp.getTenSP());
+			preparedStatement.setInt(3, sp.getSoLuong());
+			preparedStatement.setInt(4, sp.getDonGia());
+			preparedStatement.setString(5, sp.getMaDM());
+			preparedStatement.setInt(6, 0);
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int capnhapSP(SanPham sp) {
+		try {
+			String sql = "update SanPham set TenSP=?,SoLuong=?,DonGia=?,MaDM=?,isDelete=? where MaSP=?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, sp.getTenSP());
+			preparedStatement.setInt(2,sp.getSoLuong());
+			preparedStatement.setInt(3, sp.getDonGia());
+			preparedStatement.setString(4, sp.getMaDM());
+			preparedStatement.setInt(5, 0);
+			preparedStatement.setString(6,sp.getMaSP());
+			return preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public boolean xoaSP(String maSP) {
+		try {
+			String sql ="update SanPham set isDelete = ? where MaSP =?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setString(2, maSP);
+			return preparedStatement.executeUpdate() >0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+}

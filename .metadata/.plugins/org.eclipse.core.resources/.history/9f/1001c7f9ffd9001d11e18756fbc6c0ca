@@ -1,0 +1,190 @@
+package view;
+
+import java.awt.EventQueue;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import dao.DanhMucDAO;
+import dao.SanPhamDAO;
+import model.DanhMuc;
+import model.SanPham;
+
+import javax.swing.JList;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class GUI extends JFrame {
+
+	private JPanel contentPane;
+	private static JTextField txtmaSP;
+	private static JTextField txttenSP;
+	private static JTextField txtsoLuong;
+	private static JTextField txtdonGia;
+	private static JTable tbSP;
+	private static JList lsDM;
+	private static JComboBox cbDanhMuc;
+	static ArrayList<SanPham> dssp;
+	static int row;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI frame = new GUI();
+					hienthilenlist();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 792, 418);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		contentPane.setLayout(null);
+		lsDM = new JList();
+		lsDM.setBounds(10, 11, 324, 315);
+		contentPane.add(lsDM);
+		
+		JLabel lblNewLabel = new JLabel("Danh Mục");
+		lblNewLabel.setBounds(344, 196, 63, 14);
+		contentPane.add(lblNewLabel);
+		
+		cbDanhMuc = new JComboBox();
+		cbDanhMuc.setBounds(430, 192, 184, 22);
+		contentPane.add(cbDanhMuc);
+		
+		JLabel lblNewLabel_1 = new JLabel("Mã Sản Phẩm");
+		lblNewLabel_1.setBounds(344, 225, 85, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		txtmaSP = new JTextField();
+		txtmaSP.setBounds(430, 222, 184, 20);
+		contentPane.add(txtmaSP);
+		txtmaSP.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Tên Sản Phẩm");
+		lblNewLabel_2.setBounds(344, 256, 85, 14);
+		contentPane.add(lblNewLabel_2);
+		
+		txttenSP = new JTextField();
+		txttenSP.setBounds(430, 250, 184, 20);
+		contentPane.add(txttenSP);
+		txttenSP.setColumns(10);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Số Lượng");
+		lblNewLabel_1_1.setBounds(344, 284, 85, 14);
+		contentPane.add(lblNewLabel_1_1);
+		
+		txtsoLuong = new JTextField();
+		txtsoLuong.setColumns(10);
+		txtsoLuong.setBounds(430, 281, 184, 20);
+		contentPane.add(txtsoLuong);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Đơn Giá");
+		lblNewLabel_1_2.setBounds(344, 312, 85, 14);
+		contentPane.add(lblNewLabel_1_2);
+		
+		txtdonGia = new JTextField();
+		txtdonGia.setColumns(10);
+		txtdonGia.setBounds(430, 309, 184, 20);
+		contentPane.add(txtdonGia);
+		
+		JButton btnThemSP = new JButton("Thêm SP");
+		btnThemSP.setBounds(340, 349, 89, 23);
+		contentPane.add(btnThemSP);
+		
+		JButton btncapnhatSP = new JButton("Cập Nhật");
+		btncapnhatSP.setBounds(430, 349, 89, 23);
+		contentPane.add(btncapnhatSP);
+		
+		JButton btnxoaSP = new JButton("Xóa SP");
+		btnxoaSP.setBounds(525, 349, 89, 23);
+		contentPane.add(btnxoaSP);
+		
+		JButton btnThemDM = new JButton("Thêm DM");
+		btnThemDM.setBounds(34, 349, 89, 23);
+		contentPane.add(btnThemDM);
+		
+		JButton btncapnhatSP_1 = new JButton("Cập Nhật");
+		btncapnhatSP_1.setBounds(124, 349, 89, 23);
+		contentPane.add(btncapnhatSP_1);
+		
+		JButton btnxoaDM = new JButton("Xóa DM");
+		btnxoaDM.setBounds(219, 349, 89, 23);
+		contentPane.add(btnxoaDM);
+		
+		tbSP = new JTable();
+		tbSP.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null},
+			},
+			new String[] {
+				"Mã SP", "Tên SP", "Số Lượng", "Đơn Giá"
+			}
+		));
+		tbSP.setBounds(344, 12, 426, 170);
+		contentPane.add(tbSP);
+	}
+public static void hienthiList() {
+	SanPhamDAO sanPhamDAO  = new SanPhamDAO();
+	dssp = sanPhamDAO.doctheodanhmuc( ((SanPham) lsDM.getSelectedValue()).getMaDM());
+	DefaultTableModel dftbl = (DefaultTableModel)tbSP.getModel();
+    dftbl.setRowCount(0);
+    for(int i=0;i<dssp.size(); i++)
+    {
+    	Vector<Object> vec = new Vector<>();
+        vec.add(dssp.get(i).getMaSP());
+        vec.add(dssp.get(i).getTenSP());
+        vec.add(dssp.get(i).getSoLuong());
+        vec.add(dssp.get(i).getDonGia());
+        dftbl.addRow(vec);   
+    }
+	cbDanhMuc.setSelectedItem(lsDM.getSelectedValue());
+}
+public static void hienthiTable() {
+	row = tbSP.getSelectedRow();
+	if(row == -1) {
+		return;
+	}
+     SanPham sp = dssp.get(row);
+     txttenSP.setText(sp.getTenSP()); 
+     txtmaSP.setText(dssp.get(row).getMaSP());
+     txtsoLuong.setText(String.valueOf(sp.getSoLuong()));
+     txtdonGia.setText(String.valueOf(sp.getDonGia()));
+}
+ public static void hienthilenlist()
+    { 
+      DanhMucDAO dmDao = new DanhMucDAO();
+      Vector<DanhMuc> vec = dmDao.docdanhmuc();
+      lsDM.setListData(vec);
+      DefaultComboBoxModel cbo = new DefaultComboBoxModel();
+      for (DanhMuc dm : vec)
+      { 
+         cbo.addElement(dm);
+      }
+      cbDanhMuc.setModel(cbo);
+    }
+ }
